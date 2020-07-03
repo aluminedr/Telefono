@@ -39,8 +39,7 @@ public class Telefono {
                     if (validarTelefono(telefono)) {
                         respuesta = "El número de teléfono es válido";
                     } else {
-                        error = errorTelefono(telefono);
-                        respuesta = "El número de teléfono no es válido: " + error;
+                        respuesta = "El número de teléfono no es válido";
                     }
                     break;
                 case 2:
