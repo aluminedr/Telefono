@@ -46,8 +46,12 @@ public class Telefono {
                 case 2:
                     System.out.println("Ingrese el número de teléfono a validar");
                     telefono = TecladoIn.readLine();
-                    error = errorTelefono(telefono);
-                    respuesta = "El número de teléfono no es válido: " + error;
+                    if (validarTelefono(telefono)) {
+                        respuesta = "El número de teléfono es válido";
+                    } else {
+                        error = errorTelefono(telefono);
+                        respuesta = "El número de teléfono no es válido: " + error;
+                    }
                     break;
                 case 3:
                     System.out.println("Ingrese un número de teléfono");
@@ -145,7 +149,7 @@ public class Telefono {
         System.out.println("6-Ingresar una secuencia de números de teléfonos y un número de teléfono determinado A, y hallar cantidad de ocurrencias de A.");
         System.out.println("7-Incrementar un número de teléfono en una unidad ");
         System.out.println("8-Dada una secuencia de números de teléfonos (recibido por parámetro en un String) obtener aquel número más grande");
-        System.out.println("9-Dada una secuencia de nu´meros de tel´efonos (recibido por par´ametro en un String) y un nu´mero de tel´efono determinado A, hallar cantidad de ocurrencias de A en la secuencia");
+        System.out.println("9-Dada una secuencia de números de teléfonos (recibido por parámetro en un String) y un número de teléfono determinado A, hallar cantidad de ocurrencias de A en la secuencia");
         System.out.println("10-Terminar ");
         System.out.println("");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -160,7 +164,17 @@ public class Telefono {
      * @return boolean
      */
     public static boolean validarTelefono(String telefono) {
-        boolean valido = true;
+        boolean valido = false;
+        String caracteristica, numero;
+        if(telefono.length() == 14){
+            if(telefono.charAt(4)== '-'){
+                caracteristica = cortarCaracteristica(telefono);
+                numero = cortarTelefono(telefono);
+                if (isNumeric(caracteristica) && isNumeric(numero)){
+                    valido = true;
+                }
+            }
+        }
         return valido;
     }
 
@@ -170,8 +184,24 @@ public class Telefono {
      * @param telefono
      */
     public static String errorTelefono(String telefono) {
-        // System.out.println del error
-        String error = "Es un error";
+        String caracteristica, numero;
+        String error = "";
+        if(telefono.length() == 14){
+            if(telefono.charAt(4)== '-'){
+                caracteristica = cortarCaracteristica(telefono);
+                numero = cortarTelefono(telefono);
+                if (!isNumeric(caracteristica)){
+                    error += "La caracteristica ingresada no es un número \n";
+                }
+                if(!isNumeric(numero)){
+                    error += "El teléfono ingresado no es un número \n";
+                }
+            } else {
+                error += "El formato es incorrecto \n";
+            }
+        } else {
+            error += "La cantidad de digitos es incorrecta \n";
+        }
         return error;
     }
 
@@ -243,22 +273,34 @@ public class Telefono {
     /**
      * Modulo adicional
      * 
-     * @return int
+     * @return String
      */
-    public static int cortarTelefono() {
-        int telefono;
-        telefono = 132367;
-        return telefono;
+    public static String cortarTelefono(String telefono) {
+        String numTelefono;
+        numTelefono = telefono.substring(5,13);
+        return numTelefono;
     }
 
     /**
      * Modulo adicional
      * 
-     * @return int
+     * @return String
      */
-    public static int cortarCaracteristica() {
-        int caracteristica;
-        caracteristica = 132367;
+    public static String cortarCaracteristica(String telefono) {
+        String caracteristica;
+        caracteristica = telefono.substring(0,3);
         return caracteristica;
+    }
+
+
+    public static boolean isNumeric(String cadena){
+        boolean isNumeric;
+        try {
+            Integer.parseInt(cadena);
+            isNumeric = true;
+        } catch (NumberFormatException nfe){
+            isNumeric = false;
+        }
+        return isNumeric;
     }
 }
