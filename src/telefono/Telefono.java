@@ -26,8 +26,9 @@ public class Telefono {
         String telefono;
         String error;
         String segundoTelefono;
-        String errorOtro;
+        String errorTelefonoDos;
         String respuesta;
+        String cadenaNumeros;
         do {
             mostrarMenu();
             System.out.println("Elija una opción");
@@ -69,14 +70,13 @@ public class Telefono {
                                 respuesta = "El primer teléfono es menor al segundo";
                             }
                         } else {
-                            errorOtro = errorTelefono(segundoTelefono);
-                            respuesta = "El segundo número de teléfono no es válido: " + errorOtro;
+                            errorTelefonoDos = errorTelefono(segundoTelefono);
+                            respuesta = "El segundo número de teléfono no es válido: " + errorTelefonoDos;
                         }
                     } else {
                         error = errorTelefono(telefono);
                         respuesta = "El primer número de teléfono no es válido: " + error;
                     }
-                    System.out.println(respuesta);
                     break;
                 case 4:
                     System.out.println("Ingrese un número de teléfono");
@@ -95,31 +95,59 @@ public class Telefono {
                                 }
                             }
                         } else {
-                            errorOtro = errorTelefono(segundoTelefono);
-                            respuesta = "El segundo número de teléfono no es válido: " + errorOtro;
+                            errorTelefonoDos = errorTelefono(segundoTelefono);
+                            respuesta = "El segundo número de teléfono no es válido: " + errorTelefonoDos;
                         }
                     } else {
                         error = errorTelefono(telefono);
                         respuesta = "El primer número de teléfono no es válido: " + error;
                     }
-                    System.out.println(respuesta);
                     break;
                 case 5:
                     respuesta = mostrarMayor();
                     break;
                 case 6:
-                    respuesta = obtenerOcurrencias();
+                    System.out.println("Ingrese un número de teléfono");
+                    telefono = TecladoIn.readLine();
+                    if (validarTelefono(telefono)) {
+                        respuesta = obtenerOcurrencias(telefono);
+                    } else {
+                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente."
+                    }
                     break;
                 case 7:
                     System.out.println("Ingrese el número de teléfono a incrementar");
                     telefono = TecladoIn.readLine();
-                    respuesta = incrementarTelefono(telefono);
+                    if (validarTelefono(telefono)) {
+                        respuesta = incrementarTelefono(telefono);
+                    } else {
+                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente."
+                    }
+
                     break;
                 case 8:
-                    respuesta = mostrarMayor();
+                    System.out.println("Ingrese una cadena de números");
+                    cadenaNumeros = TecladoIn.readLine();
+                    if (validarCadena(cadenaNumeros)){
+                        respuesta = mostrarMenor(cadenaNumeros);
+                    } else {
+                        respuesta = "La cadena ingresada no es válida. Por favor intente nuevamente."
+                    }
                     break;
                 case 9:
-                    respuesta = obtenerOcurrencias();
+                    System.out.println("Ingrese un número de teléfono");
+                    telefono = TecladoIn.readLine();
+                    if (validarTelefono(telefono)) {
+                        System.out.println("Ingrese una cadena de números");
+                        cadenaNumeros = TecladoIn.readLine();
+                        if (validarCadena(cadenaNumeros)){
+                            respuesta = obtenerOcurrenciasCadena(cadenaNumeros);
+                        } else {
+                            respuesta = "La cadena ingresada no es válida. Por favor intente nuevamente."
+                        }
+                    } else {
+                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente."
+                    }
                     break;
                 case 10:
                     respuesta = "Se ha finalizado el programa";
@@ -146,7 +174,7 @@ public class Telefono {
         System.out.println("4-Veriﬁcar si un número de teléfono es igual a otro");
         System.out.println("5-Ingresar una secuencia de números de teléfonos y obtener aquel número más grande");
         System.out.println("6-Ingresar una secuencia de números de teléfonos y un número de teléfono determinado A, y hallar cantidad de ocurrencias de A.");
-        System.out.println("7-Incrementar un número de teléfono en una unidad ");
+        System.out.println("7-Incrementar un número de teléfono en una unidad");
         System.out.println("8-Dada una secuencia de números de teléfonos (recibido por parámetro en un String) obtener aquel número más grande");
         System.out.println("9-Dada una secuencia de números de teléfonos (recibido por parámetro en un String) y un número de teléfono determinado A, hallar cantidad de ocurrencias de A en la secuencia");
         System.out.println("10-Terminar ");
@@ -213,7 +241,13 @@ public class Telefono {
      * @return boolean
      */
     public static boolean verificarEsMenor(String telefonoUno, String telefonoDos) {
-        boolean esMenor = true;
+        boolean esMenor = false;
+        telefonoUno = cortarTelefono(telefonoUno);
+        telefonoDos = cortarTelefono(telefonoDos);
+        if (Integer.parseInt(telefonoUno)<Integer.parseInt(telefonoDos)){
+            esMenor = true;
+        }
+
         return esMenor;
     }
 
@@ -225,7 +259,12 @@ public class Telefono {
      * @return boolean
      */
     public static boolean verificarSonIguales(String telefonoUno, String telefonoDos) {
-        boolean sonIguales = true;
+        boolean sonIguales = false;
+        
+        if (telefonoUno.equals(telefonoDos)){
+            sonIguales = true;
+        }
+       
         return sonIguales;
     }
 
@@ -237,6 +276,14 @@ public class Telefono {
     public static String incrementarTelefono(String telefono) {
         // System.out.println del telefonoIncrementado
         String telefonoIncrementado = "telefono incrementado";
+        int numero = Integer.parseInt(cortarTelefono(telefono));
+        if (numero==999999999){
+            numero = 000000000; 
+        } else {
+            numero = numero++;
+        }
+        telefonoIncrementado = cortarCaracteristica(telefono) + "-" + numero;
+        // Se podría reemplazar por la siguiente función de string: telefono.replace(numero,numeroIncrementado)
         return telefonoIncrementado;
     }
 
@@ -249,24 +296,109 @@ public class Telefono {
         // validar que la opcion ingresada pertenezca a un numero valido
         // invocacion a validarTelefono() == false -> errorTelefono()
         // verificarEsMenor() || verificarSonIguales()
-        String mayor = "mayor";
-        return mayor;
+        boolean continuar;
+        String telefonoMayor = "No ha ingresado ningún teléfono válido";
+        String telefono;
+        int numero;
+        int numeroMayor = 0;
+
+        do {
+            System.out.println("Ingrese un número de teléfono");
+            telefono = TecladoIn.readLine();
+            if (validarTelefono(telefono)) {
+                numero = Integer.parseInt(cortarTelefono(telefono));
+                if (numero>numeroMayor){
+                    numeroMayor = numero;
+                    telefonoMayor = telefono;
+                }
+            } else {
+                System.out.println("El número de teléfono no es válido.");
+            }
+            System.out.println("Desea continuar (true:si|false:no)?");
+            continuar = TecladoIn.readLine();        
+        } while (continuar);
+
+
+        return telefonoMayor;
     }
 
     /**
-     * Modulo 6 Solicita al usuario un teléfono y luego solicita otros hasta que el
-     * usuario desee Finalmente indica si el primer teléfono ingresado está
-     * duplicado y de ser así, cuantas veces
+     * Modulo 6 Recibe por parámetro un teléfono. Luego solicita otros hasta que el
+     * usuario desee. Finalmente indica si el teléfono recibido por parámetro está
+     * duplicado. De ser así, también indica cuántas veces.
+     * @param telefono
      */
-    public static String obtenerOcurrencias() {
+    public static String obtenerOcurrencias(String telefono) {
         // pide telefono e inicia do while condicion seguir == no
-        String resultadoOcurrencias = "hay ocurrencias";
+        
+        String resultadoOcurrencias;
+        String telefonoNuevo;
+        int cantidadOcurrencias = 0;
+        return resultadoOcurrencias;
+        do {
+            System.out.println("Ingrese un nuevo número de teléfono");
+            telefonoNuevo = TecladoIn.readLine();
+            if (validarTelefono(telefonoNuevo)) {
+                if (verificarSonIguales(telefono,telefonoNuevo)){
+                    cantidadOcurrencias++;
+                };
+            } else {
+                System.out.println("El número de teléfono no es válido.");
+            }
+            System.out.println("Desea continuar (true:si|false:no)?");
+            continuar = TecladoIn.readLine();        
+        } while (continuar);
+
+        resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
         return resultadoOcurrencias;
     }
 
-    public static String mostrarMenor() {
-        String menor = "el menor";
-        return menor;
+    public static String obtenerOcurrenciasCadena(String telefono, String cadenaNumeros) {
+        // pide telefono e inicia do while condicion seguir == no
+        
+        String resultadoOcurrencias;
+        String telefonoNuevo;
+        int cantidadOcurrencias = 0;
+        int cantTelefonos = cadenaNumeros.length()/14;
+        int posicionInicial = 0;
+        int posicionFinal = 13;
+        
+        while (i<cantTelefonos){
+            telefonoNuevo = cadenaNumeros.substring(posicionInicial,posicionFinal);
+            if (verificarSonIguales(telefono,telefonoNuevo)){
+                cantidadOcurrencias++
+            }
+            posicionInicial+=14;
+            posicionFinal+=14;
+            i++
+        }
+
+        resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
+        return resultadoOcurrencias;
+    }
+
+    /**
+     * 
+     * Modulo 8 Recibe por parámetro una cadena de telefonos. Retorna cuál es el menor
+     * @param cadena
+     */
+    public static String mostrarMenor(String cadena) {
+       
+        String telefonoMenor="1000-999999999";
+        cantTelefonos = cadena.length()/14;
+        int posicionInicial = 0;
+        int posicionFinal = 13;
+        while (i<cantTelefonos){
+            telefono = cadena.substring(posicionInicial,posicionFinal);
+            if (verificarEsMenor(telefono,telefonoMenor)){
+                telefonoMenor = telefono
+            }
+            posicionInicial+=14;
+            posicionFinal+=14;
+            i++
+        }
+
+        return telefonoMenor;
     }
 
     /**
@@ -289,6 +421,44 @@ public class Telefono {
         String caracteristica;
         caracteristica = telefono.substring(0,3);
         return caracteristica;
+    }
+
+    public static boolean validarCadena(String cadena){
+        boolean valido = true;
+        int cantTelefonos; 
+        int i = 0;
+        int posicionInicial = 0;
+        int posicionFinal = 13;
+        String telefono;
+        if (Number.isInteger(cadena.length()/14)){
+            cantTelefonos = cadena.length()/14;
+
+            while (i<cantTelefonos && valido){
+                telefono = cadena.substring(posicionInicial,posicionFinal);
+                if (!validarTelefono(telefono)){
+                    valido=false;
+                }
+                posicionInicial+=14;
+                posicionFinal+=14;
+                i++
+            }
+        }
+        return valido;
+    }
+
+    public static String obtenerTextoOcurrencias (int ocurrencias){
+        String textoOcurrencias;
+        switch (cantidadOcurrencias){
+            case 0:
+            textoOcurrencias = "No hay ocurrencias";
+                break;
+            case 1:
+            textoOcurrencias = "Existe una ocurrencia";
+                break;
+            default:
+            textoOcurrencias = "Existen " + cantidadOcurrencias + "ocurrencias";
+        }
+        return textoOcurrencias;
     }
 
 
