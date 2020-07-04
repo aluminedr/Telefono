@@ -9,7 +9,7 @@ import Utiles.TecladoIn;
 
 /**
  *
- * @author alumi
+ * @author de Rosa, Maria Aluminé y Montes, Diego Nicolás
  */
 public class Telefono {
 
@@ -20,15 +20,8 @@ public class Telefono {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // do while condicion opcion == 10
-        // validar que la opcion ingresada pertenezca al menu y sea numerica
         int opcion;
-        String telefono;
-        String error;
-        String segundoTelefono;
-        String errorTelefonoDos;
-        String respuesta;
-        String cadenaNumeros;
+        String telefono, error, segundoTelefono, errorTelefonoDos, respuesta, cadenaNumeros;
         do {
             mostrarMenu();
             System.out.println("Elija una opción");
@@ -123,7 +116,6 @@ public class Telefono {
                     } else {
                         respuesta = "El número ingresado no es válido. Por favor intente nuevamente.";
                     }
-
                     break;
                 case 8:
                     System.out.println("Ingrese una cadena de números");
@@ -161,7 +153,8 @@ public class Telefono {
     }
 
     /**
-     * Modulo 10 Muestra las opciones de un Menú
+     * Modulo 10. 
+     * Muestra las opciones de un Menú.
      */
     public static void mostrarMenu() {
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -184,9 +177,9 @@ public class Telefono {
     }
 
     /**
-     * Modulo 1 Verifica si un telefono tiene una estructura válida Estructura
-     * válida: CCCC-NNNNNNNNN
-     * 
+     * Modulo 1.
+     * Verifica si un telefono tiene una estructura válida.
+     * Estructura válida: CCCC-NNNNNNNNN.
      * @param telefono
      * @return boolean
      */
@@ -206,9 +199,10 @@ public class Telefono {
     }
 
     /**
-     * Modulo 2 Determina por qué un telefono no es válido
-     * 
+     * Modulo 2
+     * Determina por qué un telefono no es válido.
      * @param telefono
+     * @return String
      */
     public static String errorTelefono(String telefono) {
         String caracteristica, numero;
@@ -233,8 +227,9 @@ public class Telefono {
     }
 
     /**
-     * Modulo 3 Verifica si el primer número sin considerar la característica es
-     * menor que el segundo número
+     * Modulo 3.
+     * Verifica si el primer número, sin considerar la característica, es
+     * menor que el segundo número.
      * 
      * @param telefonoUno
      * @param telefonoDos
@@ -247,12 +242,12 @@ public class Telefono {
         if (Integer.parseInt(telefonoUno)<Integer.parseInt(telefonoDos)){
             esMenor = true;
         }
-
         return esMenor;
     }
 
     /**
-     * Modulo 4 Verifica si ambos números son iguales
+     * Modulo 4.
+     * Verifica si ambos números son iguales.
      * 
      * @param telefonoUno
      * @param telefonoDos
@@ -260,48 +255,24 @@ public class Telefono {
      */
     public static boolean verificarSonIguales(String telefonoUno, String telefonoDos) {
         boolean sonIguales = false;
-        
         if (telefonoUno.equals(telefonoDos)){
             sonIguales = true;
         }
-       
         return sonIguales;
     }
 
     /**
-     * Modulo 7 Se incrementa el número telefónico en 1 unidad
-     * 
-     * @param telefono
-     */
-    public static String incrementarTelefono(String telefono) {
-        // System.out.println del telefonoIncrementado
-        String telefonoIncrementado = "telefono incrementado";
-        int numero = Integer.parseInt(cortarTelefono(telefono));
-        if (numero==999999999){
-            telefonoIncrementado = telefono.replace(Integer.toString(numero),new String ("000000000")); 
-        } else {
-            numero = numero + 1;
-            telefonoIncrementado = cortarCaracteristica(telefono) + "-" + numero;
-        }
-        // Se podría reemplazar por la siguiente función de string: telefono.replace(numero,numeroIncrementado)
-        return telefonoIncrementado;
-    }
-
-    /**
-     * Modulo 5 Solicita al usuario una secuencia de números de teléfono mientras
-     * este lo desee y finalmente muestra el mayor
+     * Modulo 5.
+     * Solicita al usuario una secuencia de números de teléfono mientras
+     * este lo desee. Finalmente muestra el mayor.
+     * @return String
      */
     public static String mostrarMayor() {
-        // do while condicion seguir == no
-        // validar que la opcion ingresada pertenezca a un numero valido
-        // invocacion a validarTelefono() == false -> errorTelefono()
-        // verificarEsMenor() || verificarSonIguales()
         boolean continuar;
         String telefonoMayor = "No ha ingresado ningún teléfono válido";
         String telefono;
         int numero;
         int numeroMayor = 0;
-
         do {
             System.out.println("Ingrese un número de teléfono");
             telefono = TecladoIn.readLine();
@@ -321,16 +292,16 @@ public class Telefono {
     }
 
     /**
-     * Modulo 6 Recibe por parámetro un teléfono. Luego solicita otros hasta que el
+     * Modulo 6.
+     * Recibe por parámetro un teléfono. Luego solicita otros hasta que el
      * usuario desee. Finalmente indica si el teléfono recibido por parámetro está
      * duplicado. De ser así, también indica cuántas veces.
      * @param telefono
+     * @return String
      */
     public static String obtenerOcurrencias(String telefono) {
-        // pide telefono e inicia do while condicion seguir == no
         boolean continuar;
-        String resultadoOcurrencias;
-        String telefonoNuevo;
+        String resultadoOcurrencias, telefonoNuevo;
         int cantidadOcurrencias = 0;
         do {
             System.out.println("Ingrese un nuevo número de teléfono");
@@ -345,48 +316,47 @@ public class Telefono {
             System.out.println("Desea continuar (true:si|false:no)?");
             continuar = TecladoIn.readLineBoolean();        
         } while (continuar);
-
-        resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
-        return resultadoOcurrencias;
-    }
-
-    public static String obtenerOcurrenciasCadena(String telefono, String cadenaNumeros) {
-        // pide telefono e inicia do while condicion seguir == no
-        
-        String resultadoOcurrencias;
-        String telefonoNuevo;
-        int cantidadOcurrencias = 0;
-        int cantTelefonos = cadenaNumeros.length()/14;
-        int posicionInicial = 0;
-        int posicionFinal = 14;
-        int i = 0;
-        
-        while (i<cantTelefonos){
-            telefonoNuevo = cadenaNumeros.substring(posicionInicial,posicionFinal);
-            if (verificarSonIguales(telefono,telefonoNuevo)){
-                cantidadOcurrencias++;
-            }
-            posicionInicial+=14;
-            posicionFinal+=14;
-            i++;
-        }
-
         resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
         return resultadoOcurrencias;
     }
 
     /**
+     * Modulo 7.
+     * Se incrementa el número telefónico en 1 unidad.
      * 
-     * Modulo 8 Recibe por parámetro una cadena de telefonos. Retorna cuál es el menor
+     * @param telefono
+     * @return String
+     */
+    public static String incrementarTelefono(String telefono) {
+        String telefonoIncrementado = "telefono incrementado";
+        int numero = Integer.parseInt(cortarTelefono(telefono));
+        // Si el número es 999999999, no se puede incrementar uno más, por lo que se transforma en 000000000
+        if (numero==999999999){
+            telefonoIncrementado = telefono.replace(Integer.toString(numero),new String ("000000000")); 
+        } else {
+            numero = numero + 1;
+            telefonoIncrementado = cortarCaracteristica(telefono) + "-" + numero;
+        }
+        return telefonoIncrementado;
+    }
+
+    /**
+     * 
+     * Modulo 8.
+     * Recibe por parámetro una cadena de telefonos contenidos en un string. 
+     * Retorna cuál de ellos es el menor.
      * @param cadena
+     * @return String
      */
     public static String mostrarMenor(String cadena) {
-        String telefonoMenor="1000-999999999";
+        String telefonoMenor="0299-999999999";
         int cantTelefonos = cadena.length()/14;
         int posicionInicial = 0;
         int posicionFinal = 14;
         String telefono;
         int i = 0;
+        // Obtenemos la cantidad de telefonos que existen, y luego, a través de substring, 
+        // obtenemos cada uno de ellos.
         while (i<cantTelefonos){
             telefono = cadena.substring(posicionInicial,posicionFinal);
             if (verificarEsMenor(telefono,telefonoMenor)){
@@ -396,13 +366,42 @@ public class Telefono {
             posicionFinal+=14;
             i++;
         }
-
         return telefonoMenor;
     }
 
     /**
-     * Modulo adicional
-     * 
+     * Modulo 9.
+     * Dado un número de telefono determinado "A", y una secuencia de teléfonos recibidos en un solo string, devueve la 
+     * cantidad de ocurrencias de A en la secuencia.
+     * @param telefono
+     * @param cadenaNumeros
+     * @return String
+     */
+    public static String obtenerOcurrenciasCadena(String telefono, String cadenaNumeros) {        
+        String resultadoOcurrencias, telefonoNuevo;
+        int cantidadOcurrencias = 0;
+        int cantTelefonos = cadenaNumeros.length()/14;
+        int posicionInicial = 0;
+        int posicionFinal = 14;
+        int i = 0;
+        while (i<cantTelefonos){
+            telefonoNuevo = cadenaNumeros.substring(posicionInicial,posicionFinal);
+            if (verificarSonIguales(telefono,telefonoNuevo)){
+                cantidadOcurrencias++;
+            }
+            posicionInicial+=14;
+            posicionFinal+=14;
+            i++;
+        }
+        resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
+        return resultadoOcurrencias;
+    }
+
+    /**
+     * Módulo adicional.
+     * Este módulo retorna solo el número del teléfono, sin tener en cuenta su característica.
+     * Ejemplo: Si recibe "0299-154567890", devuelve "154567890".
+     * @param telefono
      * @return String
      */
     public static String cortarTelefono(String telefono) {
@@ -412,8 +411,10 @@ public class Telefono {
     }
 
     /**
-     * Modulo adicional
-     * 
+     * Módulo adicional.
+     * Este módulo retorna solo la característica del teléfono, sin tener en cuenta el resto del número.
+     * Ejemplo: Si recibe "0299-154567890", devuelve "0299".
+     * @param telefono
      * @return String
      */
     public static String cortarCaracteristica(String telefono) {
@@ -421,6 +422,13 @@ public class Telefono {
         caracteristica = telefono.substring(0,4);
         return caracteristica;
     }
+
+    /**
+     * Módulo adicional.
+     * Este módulo valida que la cadena de muchos teléfonos ingresados por el usuario sea valida.
+     * @param cadena
+     * @return boolean
+     */
 
     public static boolean validarCadena(String cadena){
         boolean valido = true;
@@ -446,6 +454,13 @@ public class Telefono {
         return valido;
     }
 
+    /**
+     * Módulo adicional.
+     * Convierte el texto de ocurrencias, según la cantidad que existan.
+     * @param cantidadOcurrencias
+     * @return String
+     */
+
     public static String obtenerTextoOcurrencias (int cantidadOcurrencias){
         String textoOcurrencias;
         switch (cantidadOcurrencias){
@@ -461,7 +476,13 @@ public class Telefono {
         return textoOcurrencias;
     }
 
-
+    /**
+     * Módulo adicional.
+     * Módulo que valida que el parametro recibido sea de tipo numérico.
+     * Utilizamos un try/catch, debido a que lo hemos utilizado en otros proyectos.
+     * @param cadena
+     * @return boolean
+     */
     public static boolean isNumeric(String cadena){
         boolean isNumeric;
         try {
