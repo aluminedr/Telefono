@@ -112,16 +112,16 @@ public class Telefono {
                     if (validarTelefono(telefono)) {
                         respuesta = obtenerOcurrencias(telefono);
                     } else {
-                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente."
+                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente.";
                     }
                     break;
                 case 7:
                     System.out.println("Ingrese el número de teléfono a incrementar");
                     telefono = TecladoIn.readLine();
                     if (validarTelefono(telefono)) {
-                        respuesta = incrementarTelefono(telefono);
+                        respuesta = "El número de teléfono incrementado es: " + incrementarTelefono(telefono);
                     } else {
-                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente."
+                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente.";
                     }
 
                     break;
@@ -129,9 +129,9 @@ public class Telefono {
                     System.out.println("Ingrese una cadena de números");
                     cadenaNumeros = TecladoIn.readLine();
                     if (validarCadena(cadenaNumeros)){
-                        respuesta = mostrarMenor(cadenaNumeros);
+                        respuesta = "El número menor es: " + mostrarMenor(cadenaNumeros);
                     } else {
-                        respuesta = "La cadena ingresada no es válida. Por favor intente nuevamente."
+                        respuesta = "La cadena ingresada no es válida. Por favor intente nuevamente.";
                     }
                     break;
                 case 9:
@@ -141,12 +141,12 @@ public class Telefono {
                         System.out.println("Ingrese una cadena de números");
                         cadenaNumeros = TecladoIn.readLine();
                         if (validarCadena(cadenaNumeros)){
-                            respuesta = obtenerOcurrenciasCadena(cadenaNumeros);
+                            respuesta = obtenerOcurrenciasCadena(telefono, cadenaNumeros);
                         } else {
-                            respuesta = "La cadena ingresada no es válida. Por favor intente nuevamente."
+                            respuesta = "La cadena ingresada no es válida. Por favor intente nuevamente.";
                         }
                     } else {
-                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente."
+                        respuesta = "El número ingresado no es válido. Por favor intente nuevamente.";
                     }
                     break;
                 case 10:
@@ -278,11 +278,11 @@ public class Telefono {
         String telefonoIncrementado = "telefono incrementado";
         int numero = Integer.parseInt(cortarTelefono(telefono));
         if (numero==999999999){
-            numero = 000000000; 
+            telefonoIncrementado = telefono.replace(Integer.toString(numero),new String ("000000000")); 
         } else {
-            numero = numero++;
+            numero = numero + 1;
+            telefonoIncrementado = cortarCaracteristica(telefono) + "-" + numero;
         }
-        telefonoIncrementado = cortarCaracteristica(telefono) + "-" + numero;
         // Se podría reemplazar por la siguiente función de string: telefono.replace(numero,numeroIncrementado)
         return telefonoIncrementado;
     }
@@ -309,16 +309,14 @@ public class Telefono {
                 numero = Integer.parseInt(cortarTelefono(telefono));
                 if (numero>numeroMayor){
                     numeroMayor = numero;
-                    telefonoMayor = telefono;
+                    telefonoMayor = "El número mayor es: " + telefono;
                 }
             } else {
                 System.out.println("El número de teléfono no es válido.");
             }
             System.out.println("Desea continuar (true:si|false:no)?");
-            continuar = TecladoIn.readLine();        
+            continuar = TecladoIn.readLineBoolean();        
         } while (continuar);
-
-
         return telefonoMayor;
     }
 
@@ -330,11 +328,10 @@ public class Telefono {
      */
     public static String obtenerOcurrencias(String telefono) {
         // pide telefono e inicia do while condicion seguir == no
-        
+        boolean continuar;
         String resultadoOcurrencias;
         String telefonoNuevo;
         int cantidadOcurrencias = 0;
-        return resultadoOcurrencias;
         do {
             System.out.println("Ingrese un nuevo número de teléfono");
             telefonoNuevo = TecladoIn.readLine();
@@ -346,7 +343,7 @@ public class Telefono {
                 System.out.println("El número de teléfono no es válido.");
             }
             System.out.println("Desea continuar (true:si|false:no)?");
-            continuar = TecladoIn.readLine();        
+            continuar = TecladoIn.readLineBoolean();        
         } while (continuar);
 
         resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
@@ -361,16 +358,17 @@ public class Telefono {
         int cantidadOcurrencias = 0;
         int cantTelefonos = cadenaNumeros.length()/14;
         int posicionInicial = 0;
-        int posicionFinal = 13;
+        int posicionFinal = 14;
+        int i = 0;
         
         while (i<cantTelefonos){
             telefonoNuevo = cadenaNumeros.substring(posicionInicial,posicionFinal);
             if (verificarSonIguales(telefono,telefonoNuevo)){
-                cantidadOcurrencias++
+                cantidadOcurrencias++;
             }
             posicionInicial+=14;
             posicionFinal+=14;
-            i++
+            i++;
         }
 
         resultadoOcurrencias = obtenerTextoOcurrencias(cantidadOcurrencias);
@@ -383,19 +381,20 @@ public class Telefono {
      * @param cadena
      */
     public static String mostrarMenor(String cadena) {
-       
         String telefonoMenor="1000-999999999";
-        cantTelefonos = cadena.length()/14;
+        int cantTelefonos = cadena.length()/14;
         int posicionInicial = 0;
-        int posicionFinal = 13;
+        int posicionFinal = 14;
+        String telefono;
+        int i = 0;
         while (i<cantTelefonos){
             telefono = cadena.substring(posicionInicial,posicionFinal);
             if (verificarEsMenor(telefono,telefonoMenor)){
-                telefonoMenor = telefono
+                telefonoMenor = telefono;
             }
             posicionInicial+=14;
             posicionFinal+=14;
-            i++
+            i++;
         }
 
         return telefonoMenor;
@@ -408,7 +407,7 @@ public class Telefono {
      */
     public static String cortarTelefono(String telefono) {
         String numTelefono;
-        numTelefono = telefono.substring(5,13);
+        numTelefono = telefono.substring(5,14);
         return numTelefono;
     }
 
@@ -419,7 +418,7 @@ public class Telefono {
      */
     public static String cortarCaracteristica(String telefono) {
         String caracteristica;
-        caracteristica = telefono.substring(0,3);
+        caracteristica = telefono.substring(0,4);
         return caracteristica;
     }
 
@@ -428,11 +427,10 @@ public class Telefono {
         int cantTelefonos; 
         int i = 0;
         int posicionInicial = 0;
-        int posicionFinal = 13;
+        int posicionFinal = 14;
         String telefono;
-        if (Number.isInteger(cadena.length()/14)){
+        if ((cadena.length() % 14) == 0){
             cantTelefonos = cadena.length()/14;
-
             while (i<cantTelefonos && valido){
                 telefono = cadena.substring(posicionInicial,posicionFinal);
                 if (!validarTelefono(telefono)){
@@ -440,13 +438,15 @@ public class Telefono {
                 }
                 posicionInicial+=14;
                 posicionFinal+=14;
-                i++
+                i++;
             }
+        } else {
+            valido=false;
         }
         return valido;
     }
 
-    public static String obtenerTextoOcurrencias (int ocurrencias){
+    public static String obtenerTextoOcurrencias (int cantidadOcurrencias){
         String textoOcurrencias;
         switch (cantidadOcurrencias){
             case 0:
@@ -456,7 +456,7 @@ public class Telefono {
             textoOcurrencias = "Existe una ocurrencia";
                 break;
             default:
-            textoOcurrencias = "Existen " + cantidadOcurrencias + "ocurrencias";
+            textoOcurrencias = "Existen " + cantidadOcurrencias + " ocurrencias";
         }
         return textoOcurrencias;
     }
