@@ -1,0 +1,202 @@
+ALGORITMO telefono() RETORNA ∅
+(* Mostrará el menú reiteradas veces hasta que el usuario ingrese la opción
+ finalizar *)
+ENTERO opcion
+CARACTER telefono, error, segundoTelefono, errorTelefonoDos, respuesta, cadenaNumeros
+REPETIR
+		mostrarMenu()
+		ESCRIBIR("Elija una opción")
+		LEER(opcion)
+		SEGUN opcion HACER
+	caso 1:
+		ESCRIBIR("Ingrese el número de teléfono a validar")
+				LEER(telefono)
+				SI (validarTelefono(telefono)) ENTONCES	
+respuesta ← ‘El número de teléfono es válido’
+				SINO
+respuesta ← ‘El número de teléfono no es válido’
+				FIN SI
+	caso 2:
+		ESCRIBIR("Ingrese el número de teléfono a validar")
+				LEER(telefono)
+				SI (validarTelefono(telefono)) ENTONCES	
+respuesta ← ‘El número de teléfono es válido’
+				SINO
+					error ← errorTelefono(telefono)
+respuesta ←"El número de teléfono no es válido: " . error
+				FIN SI
+	caso 3:
+		ESCRIBIR("Ingrese un número de teléfono")
+				LEER(telefono)
+				SI (validarTelefono(telefono)) ENTONCES
+					ESCRIBIR("Ingrese otro número de teléfono")
+					LEER(segundoTelefono)
+					SI (validarTelefono(segundoTelefono)) ENTONCES
+						SI (NOT verificarEsMenor(telefono,segundoTelefono)) ENTONCES
+                            SI (NOT verificarSonIguales(telefono, segundoTelefono))ENTONCES
+                                respuesta ← "El primer teléfono es mayor al segundo"
+                            SINO
+                                respuesta ← "El primer teléfono es igual al segundo"
+                            FIN SI
+						SINO
+							respuesta ←"El primer teléfono es menor al segundo"
+						FIN SI
+					SINO
+						errorTelefonoDos ← errorTelefono(telefono)
+respuesta ←"El segundo número de teléfono no es válido: " . errorTelefonoDos
+					FIN SI
+				SINO
+					error ← errorTelefono(telefono)
+respuesta ←"El primer número de teléfono no es válido: " . error
+				FIN SI
+	caso 4:
+
+    ESCRIBIR("Ingrese un número de teléfono")
+    LEER(telefono)
+    SI (validarTelefono(telefono)) ENTONCES
+        ESCRIBIR("Ingrese otro número de teléfono")
+        LEER(segundoTelefono)
+        SI (validarTelefono(segundoTelefono)) ENTONCES
+            SI (verificarSONIGUALES(telefono,segundoTelefono)) ENTONCES
+                respuesta ← "El primer teléfono es igual al segundo"
+            SINO
+                SI (verificarEsMenor(telefono, segundoTelefono))ENTONCES
+                    respuesta ← "El primer teléfono es menor al segundo"
+                SINO
+                    respuesta ← "El primer teléfono es mayor al segundo"
+                FIN SI
+            FIN SI
+        SINO
+            errorTelefonoDos ← errorTelefono(telefono)
+                respuesta ←"El segundo número de teléfono no es válido: " . errorTelefonoDos
+        FIN SI
+    SINO
+        error ← errorTelefono(telefono)
+        respuesta ←"El primer número de teléfono no es válido: " . error
+    FIN SI
+
+	caso 5:
+        respuesta ←  mostrarMayor()
+
+caso 6:
+    ESCRIBIR("Ingrese un número de teléfono")
+	LEER(telefono)
+    SI (validarTelefono(telefono)) ENTONCES
+        respuesta ← obtenerOcurrencias(telefono)
+    SINO
+        respuesta ← "El número ingresado no es válido. Por favor intente nuevamente."
+    FIN SI
+
+    
+caso 7:
+    ESCRIBIR("Ingrese el número de teléfono a incrementar")
+	LEER(telefono)
+    SI (validarTelefono(telefono)) ENTONCES
+        respuesta ← "El número de teléfono incrementado es: " + incrementarTelefono(telefono)
+    SINO
+        respuesta ← "El número ingresado no es válido. Por favor intente nuevamente."
+    FIN SI
+caso 8:
+    ESCRIBIR("Ingrese una cadena de números")
+	LEER(cadenaNumeros)
+    SI (validarCadena(cadenaNumeros)) ENTONCES
+        respuesta ← "El número menor es: " . mostrarMenor(cadenaNumeros)
+    SINO
+        respuesta ← "La cadena ingresada no es válida. Por favor intente nuevamente."
+    FIN SI
+
+caso 9:
+    ESCRIBIR("Ingrese un número de teléfono")
+	LEER(telefono)
+    SI (validarTelefono(telefono)) ENTONCES
+        ESCRIBIR("Ingrese una cadena de números")
+	    LEER(cadenaNumeros)
+         SI (validarCadena(cadenaNumeros)) ENTONCES
+            respuesta ← obtenerOcurrenciasCadena(telefono, cadenaNumeros)
+        SINO
+            respuesta ← "La cadena ingresada no es válida. Por favor intente nuevamente."
+        FIN SI
+    SINO
+        respuesta ← "El número ingresado no es válido. Por favor intente nuevamente."
+    FIN SI
+
+
+caso 10:
+	respuesta ← ‘Se ha finalizado el programa’
+∀o: 
+		respuesta ← ‘La opción ingresada no corresponde a una opción válida, por favor intentelo nuevamente’
+FIN SEGUN
+HASTA (opcion = 10)
+FIN ALGORITMO telefono
+
+
+
+MODULO validarTelefono(CARACTER telefono) RETORNA LOGICO
+    (*
+        Modulo 1.
+        Verifica si un telefono tiene una estructura válida.
+        Estructura válida: CCCC-NNNNNNNNN.
+    *)
+    LOGICO valido ← false
+    CARACTER caracteristica, numero
+
+    SI (longitud(telefono) = 14) ENTONCES
+        SI (posicion(telefono,4) = '-') ENTONCES
+            caracteristica ← cortarCaracteristica(telefono)
+            numero ← cortarTelefono(telefono)
+            SI (isNumeric(caracteristica) AND isNumeric(telefono)) ENTONCES
+                valido ← false
+            FIN SI
+        FIN SI
+    FIN SI
+    RETORNA valido
+FIN MODULO validarTelefono
+
+
+MODULO errorTelefono(String telefono) RETORNA CARACTER
+    (*
+        Modulo 2.
+        Determina por qué un teléfono no es válido.
+    *)
+    CARACTER caracteristica, numero
+    CARACTER error ← ""
+
+    SI () ENTONCES
+
+    SINO
+        error ← error . "La cantidad de dígitos es incorrecta \n";
+    FIN SI
+
+FIN MODULO
+
+
+/**
+     * Modulo 2.
+     * Determina por qué un teléfono no es válido.
+     * @param telefono
+     * @return String
+     */
+    public static String errorTelefono(String telefono) {
+        String caracteristica, numero;
+        String error = "";
+        if(telefono.length() == 14){
+            if(telefono.charAt(4)== '-'){
+                caracteristica = cortarCaracteristica(telefono);
+                numero = cortarTelefono(telefono);
+                if (!isNumeric(caracteristica)){
+                    error += "La característica ingresada no es un número \n";
+                }
+                if(!isNumeric(numero)){
+                    error += "El teléfono ingresado no es un número \n";
+                }
+            } else {
+                error += "El formato es incorrecto \n";
+            }
+        } else {
+            error += "La cantidad de dígitos es incorrecta \n";
+        }
+        return error;
+    }
+
+
+
