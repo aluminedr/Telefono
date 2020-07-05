@@ -282,12 +282,60 @@ MODULO incrementarTelefono (TEXTO telefono) RETORNA TEXTO
     RETORNA telefonoIncrementado
 FIN MODULO incrementarTelefono
 
+MODULO devolverMenor(TEXTO cadena) RETORNA TEXTO
+    (*
+        Modulo 8.
+        Recibe por parámetro una cadena de telefonos contenidos en un string. 
+        Retorna cuál de ellos es el menor.
+    *)
+    TEXTO telefonoMenor ← "0299-999999999"
+    ENTERO cantTelefonos ← (longitud(cadena)/14)
+    ENTERO posicionInicial ← 0
+    ENTERO posicionFinal ← 14
+    TEXTO telefono
+    ENTERO i ← 0
+    (*
+        Obtenemos la cantidad de telefonos que existen, y luego, a través de substring, 
+        obtenemos cada uno de ellos.
+    *)
+    MIENTRAS (i<cantTelefonos) HACER
+        telefono ← subcadena(cadena,posicionInicial,posicionFinal)
+        SI (verificarEsMenor(telefono,telefonoMenor)) ENTONCES
+            telefonoMenor ← telefono
+        FIN SI
+        posicionInicial ← posicionInicial + 14
+        posicionFinal ← posicionFinal + 14
+        i ← i+1
+    FIN MIENTRAS
+    RETORNA telefonoMenor
+FIN MODULO devolverMenor
 
-falta modulo 8
+MODULO obtenerOcurrenciasCadena (TEXTO telefono, TEXTO cadenaNumeros) RETORNA TEXTO
+    (*
+        Modulo 9.
+        Dado un número de telefono determinado "A", y una secuencia de teléfonos 
+        recibidos por parámetro en un solo string, devueve la 
+        cantidad de ocurrencias de A en la secuencia.   
 
-falta modulo 9
+    *)
+    TEXTO resultadoOcurrencias, telefonoNuevo
+    ENTERO cantidadOcurrencias ← 0
+    ENTERO cantTelefonos ← (longitud(cadenaNumeros)/14)
+    ENTERO posicionInicial ← 0
+    ENTERO posicionFinal ← 14
+    ENTERO i ← 0
+    MIENTRAS (i<cantTelefonos) HACER
+        telefonoNuevo ← subcadena(cadenaNumeros,posicionInicial,posicionFinal)
+        SI (verificarSonIguales(telefono,telefonoNuevo)) ENTONCES
+            cantidadOcurrencias ← cantidadOcurrencias + 1
+        FIN SI
+        posicionInicial ← posicionInicial + 14
+        posicionFinal ← posicionFinal + 14
+        i ← i+1
+    FIN MIENTRAS
+FIN MODULO obtenerOcurrenciasCadena
 
-MODULO cortarTelefono (TEXTO telefono)
+MODULO cortarTelefono (TEXTO telefono) RETORNA TEXTO
     (*
         Módulo adicional.
         Este módulo retorna solo el número del teléfono, sin tener en cuenta su característica.
@@ -299,7 +347,7 @@ MODULO cortarTelefono (TEXTO telefono)
 FIN MODULO cortarTelefono
 
 
-MODULO cortarCaracteristica (TEXTO telefono)
+MODULO cortarCaracteristica (TEXTO telefono) RETORNA TEXTO
     (*
         Módulo adicional.
         Este módulo retorna solo la característica del teléfono, sin tener en cuenta el resto del número.
@@ -310,31 +358,64 @@ MODULO cortarCaracteristica (TEXTO telefono)
     RETORNA caracteristica
 FIN MODULO cortarCaracteristica
 
-falta modulo validarCadena
+MODULO validarCadena (TEXTO cadena) RETORNA LOGICO
+    (*
+        Módulo adicional.
+        Este módulo valida que la cadena de teléfonos ingresados por el usuario sea válida.
+    *)
+    LOGICO valido ← VERDADERO
+    ENTERO cantTelefonos
+    ENTERO i ← 0
+    ENTERO posicionInicial ← 0
+    ENTERO posicionFinal ← 14
+    TEXTO telefono
 
-MODULO obtenerTextoOcurrencias (ENTERO cantidadOcurrencias)
+    SI (longitud(cadena) MOD 14 = 0) ENTONCES
+        cantTelefonos ← (longitud(cadena)/14)
+        MIENTRAS (i<cantTelefonos AND valido) HACER
+            telefono ← subcadena(cadena,posicionInicial,posicionFinal)
+            SI (NOT(validarTelefono(telefono))) ENTONCES
+                valido ← FALSO
+            FIN SI
+        FIN MIENTRAS
+    SINO
+        valido ← FALSO
+    FIN SI
+    RETORNA valido
+FIN MODULO
 
 
-/**
-     * Módulo adicional.
-     * Convierte las ocurrencias, según la cantidad que existan, a texto.
-     * @param cantidadOcurrencias
-     * @return String
-     */
+MODULO obtenerTextoOcurrencias (ENTERO cantidadOcurrencias) RETORNA TEXTO
+    (*
+        Módulo adicional.
+        Convierte las ocurrencias, según la cantidad que existan, a texto.   
+    *)
+    TEXTO textoOcurrencias
+    SEGUN cantidadOcurrencias HACER
+        caso 0:
+            textoOcurrencias ← "No hay ocurrencias"
+        caso 1:
+            textoOcurrencias ← "Existe una ocurrencia"
+        ∀o:
+            textoOcurrencias ← "Existen ", cantidadOcurrencias , " ocurrencias"
+    FIN SEGUN
+    RETORNA textoOcurrencias
+FIN MODULO obtenerTextoOcurrencias
 
-    public static String obtenerTextoOcurrencias (int cantidadOcurrencias){
-        String textoOcurrencias;
-        switch (cantidadOcurrencias){
-            case 0:
-            textoOcurrencias = "No hay ocurrencias";
-                break;
-            case 1:
-            textoOcurrencias = "Existe una ocurrencia";
-                break;
-            default:
-            textoOcurrencias = "Existen " + cantidadOcurrencias + " ocurrencias";
-        }
-        return textoOcurrencias;
-    }
-
-
+MODULO isNumeric (TEXTO cadena) RETORNA LOGICO
+    (*
+        Módulo adicional.
+        Módulo que valida que el parametro recibido sea de tipo numérico.
+        Utilizamos un try/catch, debido a que lo hemos utilizado en otros proyectos.
+        Este nos permite intentar convertir el String a int y si no lo logra arroja una excepción,
+        permitiendonos darnos cuenta de que dicho String no contiene números.
+    *)
+    LOGICO isNumeric
+    INTENTAR
+        convertirAEntero(cadena)
+        isNumeric ← VERDADERO 
+    CAPTURAR (error)
+        isNumeric ← FALSO 
+    FIN INTENTAR
+    RETORNA isNumeric
+FIN MODULO
