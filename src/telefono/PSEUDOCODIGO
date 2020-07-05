@@ -419,3 +419,28 @@ MODULO isNumeric (TEXTO cadena) RETORNA LOGICO
     FIN INTENTAR
     RETORNA isNumeric
 FIN MODULO
+
+
+    MODULO mostrarMenu() RETORNA ∅
+    (*
+      Modulo 10. 
+      Muestra las opciones de un Menú.
+    *)
+        ESCRIBIR("--------------------------------------------------------------------------------------------------------------------------------------------------")(*con salto*)
+        ESCRIBIR("MENÚ")(*con salto*)
+        ESCRIBIR("")(*con salto*)
+        ESCRIBIR("--------------------------------------------------------------------------------------------------------------------------------------------------")(*con salto*)
+        ESCRIBIR("1-Veriﬁcar si un número de teléfono es válido")(*con salto*)
+        ESCRIBIR("2-Determinar porque un número de teléfono no es válido")(*con salto*)
+        ESCRIBIR("3-Veriﬁcar si un número de teléfono es mayor que otro ")(*con salto*)
+        ESCRIBIR("4-Veriﬁcar si un número de teléfono es igual a otro")(*con salto*)
+        ESCRIBIR("5-Ingresar una secuencia de números de teléfonos y obtener aquel número más grande")(*con salto*)
+        ESCRIBIR("6-Ingresar una secuencia de números de teléfonos y un número de teléfono determinado A, y hallar cantidad de ocurrencias de A.")(*con salto*)
+        ESCRIBIR("7-Incrementar un número de teléfono en una unidad")(*con salto*)
+        ESCRIBIR("8-Dada una secuencia de números de teléfonos (recibido por parámetro en un String) obtener aquel número más grande")(*con salto*)
+        ESCRIBIR("9-Dada una secuencia de números de teléfonos (recibido por parámetro en un String) y un número de teléfono determinado A, hallar cantidad de ocurrencias de A en la secuencia")(*con salto*)
+        ESCRIBIR("10-Terminar ")(*con salto*)
+        ESCRIBIR("")(*con salto*)
+        ESCRIBIR("--------------------------------------------------------------------------------------------------------------------------------------------------")(*con salto*)
+        ESCRIBIR("")(*con salto*)
+    FIN MODULO mostrarMenu
