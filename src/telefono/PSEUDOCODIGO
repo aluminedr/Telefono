@@ -32,7 +32,7 @@ respuesta ←"El número de teléfono no es válido: " . error
 					ESCRIBIR("Ingrese otro número de teléfono")
 					LEER(segundoTelefono)
 					SI (validarTelefono(segundoTelefono)) ENTONCES
-						SI (NOT verificarEsMenor(telefono,segundoTelefono)) ENTONCES
+						SI (NOT (verificarEsMenor(telefono,segundoTelefono))) ENTONCES
                             SI (NOT verificarSonIguales(telefono, segundoTelefono))ENTONCES
                                 respuesta ← "El primer teléfono es mayor al segundo"
                             SINO
@@ -131,21 +131,21 @@ FIN ALGORITMO telefono
 
 
 
-MODULO validarTelefono(CARACTER telefono) RETORNA LOGICO
+MODULO validarTelefono(TEXTO telefono) RETORNA LOGICO
     (*
         Modulo 1.
         Verifica si un telefono tiene una estructura válida.
         Estructura válida: CCCC-NNNNNNNNN.
     *)
-    LOGICO valido ← false
-    CARACTER caracteristica, numero
+    TEXTO caracteristica, numero
+    LOGICO valido ← FALSO
 
     SI (longitud(telefono) = 14) ENTONCES
         SI (posicion(telefono,4) = '-') ENTONCES
             caracteristica ← cortarCaracteristica(telefono)
             numero ← cortarTelefono(telefono)
             SI (isNumeric(caracteristica) AND isNumeric(telefono)) ENTONCES
-                valido ← false
+                valido ← VERDADERO
             FIN SI
         FIN SI
     FIN SI
@@ -153,50 +153,188 @@ MODULO validarTelefono(CARACTER telefono) RETORNA LOGICO
 FIN MODULO validarTelefono
 
 
-MODULO errorTelefono(String telefono) RETORNA CARACTER
+MODULO errorTelefono(TEXTO telefono) RETORNA TEXTO
     (*
         Modulo 2.
         Determina por qué un teléfono no es válido.
     *)
-    CARACTER caracteristica, numero
-    CARACTER error ← ""
+    TEXTO caracteristica, numero
+    TEXTO error ← ""
 
-    SI () ENTONCES
-
+    SI (longitud(telefono) = 14) ENTONCES
+        SI (posicion(telefono,4) = '-') ENTONCES
+            caracteristica ← cortarCaracteristica(telefono)
+            numero ← cortarTelefono(telefono)
+            SI (NOT (isNumeric(caracteristica))) ENTONCES
+                error ← error , 'La característica ingresada no es un número (* con salto *)'
+            FIN SI
+            SI (NOT (isNumeric(numero))) ENTONCES
+                error ← error , 'El teléfono ingresado no es un número (* con salto *)'
+            FIN SI
+        SINO 
+                error ← error , 'El formato es incorrecto (* con salto *)'
+        FIN SI
     SINO
-        error ← error . "La cantidad de dígitos es incorrecta \n";
+        error ← error , "La cantidad de dígitos es incorrecta (* con salto *)";
     FIN SI
+    RETORNA error
+FIN MODULO errorTelefono
 
-FIN MODULO
+
+MODULO validarTelefono(TEXTO telefonoUno, TEXTO telefonoDos) RETORNA LOGICO
+    (*
+        Modulo 3.
+        Verifica si el primer número(sin considerar la característica), es
+        menor que el segundo.
+    *)
+    LOGICO esMenor ← FALSO
+    TEXTO telefonoUno ← cortarTelefono(telefonoUno)
+    TEXTO telefonoDos ← cortarTelefono(telefonoDos)
+
+    SI (convertirAEntero(telefonoUno) < convertirAEntero(telefonoDos)) ENTONCES
+        esMenor ← VERDADERO
+    FIN SI
+    RETORNA esMenor
+FIN MODULO validarTelefono
+
+
+MODULO verificarSonIguales(TEXTO telefonoUno, TEXTO telefonoDos) RETORNA LOGICO
+    (*
+        Modulo 4.
+        Verifica si ambos números son iguales.
+    *)
+    LOGICO sonIguales ← FALSO
+
+    SI (igual(telefonoUno,telefonoDos)) ENTONCES
+        sonIguales ← VERDADERO
+    FIN SI
+FIN MODULO verificarSonIguales
+
+MODULO devolverMayor() RETORNA TEXTO
+    (*
+        MODULO 5
+        Solicita al usuario una secuencia de números de teléfono mientras
+        este lo desee. Finalmente devuelve el mayor.
+    *)
+    LOGICO continuar 
+    TEXTO telefonoMayor ← "No ha ingresado ningún teléfono válido"
+    TEXTO telefono
+    ENTERO numero
+    ENTERO numeroMayor ← 0 
+    REPETIR
+        ESCRIBIR("Ingrese un número de teléfono")
+	    LEER(telefono)
+        SI (validarTelefono(telefono)) ENTONCES
+            numero ← convertirAEntero(cortarTelefono(telefono))
+            SI (numero>numeroMayor) ENTONCES
+                numeroMayor ← numero
+                telefonoMayor ← "El número mayor es: " , telefono 
+            FIN SI
+        SINO
+            ESCRIBIR("El número de teléfono no es válido")
+        FIN SI
+        ESCRIBIR("Desea continuar (VERDADERO:si|FALSO:no)?")
+        LEER(continuar)
+    HASTA (continuar = FALSO)
+    RETORNA telefonoMayor
+FIN MODULO devolverMayor
+
+MODULO obtenerOcurrencias(TEXTO telefono) RETORNA TEXTO
+    (*
+        Modulo 6.
+        Recibe por parámetro un teléfono. Luego solicita otros hasta que el
+        usuario desee. Finalmente indica si el teléfono recibido por parámetro está
+        duplicado. De ser así, también indica cuántas veces.
+    *)
+    LOGICO continuar
+    TEXTO resultadoOcurrencias, telefonoNuevo
+    ENTERO cantidadOcurrencias ← 0
+    REPETIR
+        ESCRIBIR("Ingrese un nuevo número de teléfono")
+	    LEER(telefonoNuevo)
+        SI (validarTelefono(telefonoNuevo)) ENTONCES
+            SI (verificarSonIguales(telefono,telefonoNuevo)) ENTONCES
+                cantidadOcurrencias ← cantidadOcurrencias + 1
+            FIN SI            
+        SINO
+            ESCRIBIR("El número de teléfono no es válido.)
+        FIN SI
+        ESCRIBIR("Desea continuar (VERDADERO:si|FALSO:no)?")
+        LEER(continuar)
+    HASTA (continuar = FALSO)
+    resultadoOcurrencias ← obtenerTextoOcurrencias(cantidadOcurrencias)
+    RETORNA resultadoOcurrencias
+FIN MODULO obtenerOcurrencias
+
+MODULO incrementarTelefono (TEXTO telefono) RETORNA TEXTO
+    TEXTO telefonoIncrementado
+    ENTERO numero ← convertirAEntero(cortarTelefono(telefono))
+    (*
+        Si el número es 999999999, no se puede incrementar uno más, por lo que se transforma en 000000000
+        Utilizamos dos métodos diferentes con el propósito de mostrar las diferentes maneras de hacerlo.
+    *)
+    SI (numero = 999999999) ENTONCES
+        telefonoIncrementado ← telefono.reemplazar(convertirEnteroATexto(numero),"000000000")
+    SINO
+        numero ← numero + 1
+        telefonoIncrementado ← cortarCaracteristica(telefono), "-", numero
+    FIN SI
+    RETORNA telefonoIncrementado
+FIN MODULO incrementarTelefono
+
+
+falta modulo 8
+
+falta modulo 9
+
+MODULO cortarTelefono (TEXTO telefono)
+    (*
+        Módulo adicional.
+        Este módulo retorna solo el número del teléfono, sin tener en cuenta su característica.
+        Ejemplo: Si recibe "0299-154567890", devuelve "154567890".
+    *)
+    TEXTO numTelefono
+    numTelefono ← subcadena(telefono,5,14)
+    RETORNA numTelefono
+FIN MODULO cortarTelefono
+
+
+MODULO cortarCaracteristica (TEXTO telefono)
+    (*
+        Módulo adicional.
+        Este módulo retorna solo la característica del teléfono, sin tener en cuenta el resto del número.
+        Ejemplo: Si recibe "0299-154567890", devuelve "0299".
+    *)
+    TEXTO caracteristica
+    caracteristica ← subcadena(caracteristica,0,4)
+    RETORNA caracteristica
+FIN MODULO cortarCaracteristica
+
+falta modulo validarCadena
+
+MODULO obtenerTextoOcurrencias (ENTERO cantidadOcurrencias)
 
 
 /**
-     * Modulo 2.
-     * Determina por qué un teléfono no es válido.
-     * @param telefono
+     * Módulo adicional.
+     * Convierte las ocurrencias, según la cantidad que existan, a texto.
+     * @param cantidadOcurrencias
      * @return String
      */
-    public static String errorTelefono(String telefono) {
-        String caracteristica, numero;
-        String error = "";
-        if(telefono.length() == 14){
-            if(telefono.charAt(4)== '-'){
-                caracteristica = cortarCaracteristica(telefono);
-                numero = cortarTelefono(telefono);
-                if (!isNumeric(caracteristica)){
-                    error += "La característica ingresada no es un número \n";
-                }
-                if(!isNumeric(numero)){
-                    error += "El teléfono ingresado no es un número \n";
-                }
-            } else {
-                error += "El formato es incorrecto \n";
-            }
-        } else {
-            error += "La cantidad de dígitos es incorrecta \n";
-        }
-        return error;
-    }
 
+    public static String obtenerTextoOcurrencias (int cantidadOcurrencias){
+        String textoOcurrencias;
+        switch (cantidadOcurrencias){
+            case 0:
+            textoOcurrencias = "No hay ocurrencias";
+                break;
+            case 1:
+            textoOcurrencias = "Existe una ocurrencia";
+                break;
+            default:
+            textoOcurrencias = "Existen " + cantidadOcurrencias + " ocurrencias";
+        }
+        return textoOcurrencias;
+    }
 
 
